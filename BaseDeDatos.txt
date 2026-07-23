@@ -1,0 +1,59 @@
+
+--Script de creacion de la base de datos para el Sistema de Ventas
+
+DROP DATABASE IF EXISTS sistemaventasdb;
+CREATE DATABASE sistemaventasdb;
+USE sistemaventasdb;
+
+-- Tabla de productos (corresponde a la clase Producto)
+CREATE TABLE productos (
+    codigo_articulo       VARCHAR(20)     NOT NULL,
+    nombre_articulo       VARCHAR(100)    NOT NULL,
+    descripcion_articulo  VARCHAR(255),
+    precio_unitario       DECIMAL(10,2)   NOT NULL,
+    cantidad_en_stock     INT             NOT NULL DEFAULT 0,
+    stock_minimo          INT             NOT NULL DEFAULT 5,
+    PRIMARY KEY (codigo_articulo)
+);
+
+-- Tabla de clientes (corresponde a la clase Cliente)
+CREATE TABLE clientes (
+    id_cliente            VARCHAR(20)     NOT NULL,
+    nombre_completo        VARCHAR(150)    NOT NULL,
+    numero_telefono       VARCHAR(20),
+    correo_electronico    VARCHAR(100),
+    PRIMARY KEY (id_cliente)
+);
+
+-- Tabla de ventas (cabecera, corresponde a la clase Venta)
+CREATE TABLE ventas (
+    numero_venta          INT             NOT NULL AUTO_INCREMENT,
+    fecha_venta           DATETIME        NOT NULL,
+    id_cliente            VARCHAR(20)     NOT NULL,
+    total_venta           DECIMAL(10,2)   NOT NULL DEFAULT 0,
+    PRIMARY KEY (numero_venta),
+    FOREIGN KEY (id_cliente) REFERENCES clientes(id_cliente)
+);
+
+-- Tabla de detalle de venta (corresponde a la clase DetalleDeVenta)
+CREATE TABLE detalle_venta (
+    id_detalle            INT             NOT NULL AUTO_INCREMENT,
+    numero_venta          INT             NOT NULL,
+    codigo_articulo       VARCHAR(20)     NOT NULL,
+    cantidad_vendida      INT             NOT NULL,
+    precio_unitario_venta DECIMAL(10,2)   NOT NULL,
+    subtotal              DECIMAL(10,2)   NOT NULL,
+    PRIMARY KEY (id_detalle),
+    FOREIGN KEY (numero_venta) REFERENCES ventas(numero_venta),
+    FOREIGN KEY (codigo_articulo) REFERENCES productos(codigo_articulo)
+);
+
+-- Datos de prueba, opcional, para probar el CRUD sin escribir todo a mano
+INSERT INTO productos (codigo_articulo, nombre_articulo, descripcion_articulo, precio_unitario, cantidad_en_stock, stock_minimo)
+VALUES
+    ('P-001', 'Teclado mecánico', 'Teclado mecánico switches rojos', 25000.00, 10, 3),
+    ('P-002', 'Mouse inalámbrico', 'Mouse inalámbrico 2.4GHz', 12000.00, 15, 5);
+
+INSERT INTO clientes (id_cliente, nombre_completo, numero_telefono, correo_electronico)
+VALUES
+    ('C-001', 'Paula DA', '85746463', 'paulay@correo.com');

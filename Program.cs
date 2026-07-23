@@ -1,6 +1,4 @@
-﻿
-using SistemaVentas.Facturacion;
-
+﻿using ProyectoFinalProgramacionV.Facturacion;
 
 class Program
 {
@@ -13,4 +11,3 @@ class Program
         modulo.IniciarMenuPrincipal();
     }
 }
-
