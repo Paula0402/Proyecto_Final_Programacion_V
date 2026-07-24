@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProyectoFinalProgramacionV
+namespace ProyectoFinalProgramacionV_Gitlab
 {
 
     /// Representa a un cliente registrado en el sistema de ventas.

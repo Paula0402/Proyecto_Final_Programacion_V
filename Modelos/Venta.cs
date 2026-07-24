@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace ProyectoFinalProgramacionV
+namespace ProyectoFinalProgramacionV_Gitlab
 {
     /// Representa la cabecera de una venta: fecha, cliente, detalles y total.
     internal class Venta

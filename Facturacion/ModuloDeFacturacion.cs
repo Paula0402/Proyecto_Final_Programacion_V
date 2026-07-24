@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ProyectoFinalProgramacionV.Repositorio;
-using ProyectoFinalProgramacionV.Fabrica;
+using ProyectoFinalProgramacionV_Gitlab.Repositorio;
+using ProyectoFinalProgramacionV_Gitlab.Fabrica;
 
 
-namespace ProyectoFinalProgramacionV.Facturacion
+namespace ProyectoFinalProgramacionV_Gitlab.Facturacion
 {
     /// Modulo principal del sistema: contiene el menu de consola y coordina
     /// las operaciones sobre productos, clientes y ventas a traves de los repositorios.
