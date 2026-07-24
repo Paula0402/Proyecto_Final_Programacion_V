@@ -1,27 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using ProyectoFinalProgramacionV.Repositorio;
+using ProyectoFinalProgramacionV.Fabrica;
 
 
 namespace ProyectoFinalProgramacionV.Facturacion
 {
     /// Modulo principal del sistema: contiene el menu de consola y coordina
-    /// las operaciones sobre productos, clientes y ventas.
+    /// las operaciones sobre productos, clientes y ventas a traves de los repositorios.
     internal class ModuloDeFacturacion
     {
-        private List<Producto> listaDeProductos;
-        private List<Cliente> listaDeClientes;
-        private List<Venta> listaDeVentas;
-        private int contadorDeVentas;
+        private ProductoRepositorio productoRepositorio;
+        private ClienteRepositorio clienteRepositorio;
+        private VentaRepositorio ventaRepositorio;
 
         public ModuloDeFacturacion()
         {
-            listaDeProductos = new List<Producto>();
-            listaDeClientes = new List<Cliente>();
-            listaDeVentas = new List<Venta>();
-            contadorDeVentas = 1;
+            productoRepositorio = FabricaDeRepositorios.CrearProductoRepositorio();
+            clienteRepositorio = FabricaDeRepositorios.CrearClienteRepositorio();
+            ventaRepositorio = FabricaDeRepositorios.CrearVentaRepositorio(productoRepositorio, clienteRepositorio);
         }
 
         public void IniciarMenuPrincipal()
@@ -107,7 +105,7 @@ namespace ProyectoFinalProgramacionV.Facturacion
             try
             {
                 Producto nuevoProducto = new Producto(codigo, nombre, descripcion, precio, stock);
-                listaDeProductos.Add(nuevoProducto);
+                productoRepositorio.AgregarProducto(nuevoProducto);
                 Console.WriteLine("Producto agregado correctamente.");
             }
             catch (Exception ex)
@@ -118,14 +116,16 @@ namespace ProyectoFinalProgramacionV.Facturacion
 
         private void ListarProductos()
         {
-            if (listaDeProductos.Count == 0)
+            List<Producto> productos = productoRepositorio.ObtenerTodosLosProductos();
+
+            if (productos.Count == 0)
             {
                 Console.WriteLine("No hay productos registrados.");
                 return;
             }
 
             Console.WriteLine("\n--- Listado de productos ---");
-            foreach (var producto in listaDeProductos)
+            foreach (var producto in productos)
                 producto.MostrarInformacionEnConsola();
         }
 
@@ -134,7 +134,7 @@ namespace ProyectoFinalProgramacionV.Facturacion
             Console.Write("Codigo del producto a actualizar: ");
             string codigo = Console.ReadLine();
 
-            Producto productoEncontrado = listaDeProductos.FirstOrDefault(p => p.CodigoDeArticulo == codigo);
+            Producto productoEncontrado = productoRepositorio.BuscarProductoPorCodigo(codigo);
 
             if (productoEncontrado == null)
             {
@@ -152,6 +152,7 @@ namespace ProyectoFinalProgramacionV.Facturacion
             if (!string.IsNullOrWhiteSpace(nuevoPrecioTexto))
                 productoEncontrado.PrecioUnitario = Convert.ToDecimal(nuevoPrecioTexto);
 
+            productoRepositorio.ActualizarProducto(productoEncontrado);
             Console.WriteLine("Producto actualizado correctamente.");
         }
 
@@ -160,7 +161,7 @@ namespace ProyectoFinalProgramacionV.Facturacion
             Console.Write("Codigo del producto a eliminar: ");
             string codigo = Console.ReadLine();
 
-            Producto productoEncontrado = listaDeProductos.FirstOrDefault(p => p.CodigoDeArticulo == codigo);
+            Producto productoEncontrado = productoRepositorio.BuscarProductoPorCodigo(codigo);
 
             if (productoEncontrado == null)
             {
@@ -168,7 +169,7 @@ namespace ProyectoFinalProgramacionV.Facturacion
                 return;
             }
 
-            listaDeProductos.Remove(productoEncontrado);
+            productoRepositorio.EliminarProducto(codigo);
             Console.WriteLine("Producto eliminado correctamente.");
         }
 
@@ -223,7 +224,7 @@ namespace ProyectoFinalProgramacionV.Facturacion
                 if (!nuevoCliente.CorreoElectronicoEsValido())
                     Console.WriteLine("Advertencia: el correo no parece valido, se guardo de todas formas.");
 
-                listaDeClientes.Add(nuevoCliente);
+                clienteRepositorio.AgregarCliente(nuevoCliente);
                 Console.WriteLine("Cliente agregado correctamente.");
             }
             catch (Exception ex)
@@ -234,14 +235,16 @@ namespace ProyectoFinalProgramacionV.Facturacion
 
         private void ListarClientes()
         {
-            if (listaDeClientes.Count == 0)
+            List<Cliente> clientes = clienteRepositorio.ObtenerTodosLosClientes();
+
+            if (clientes.Count == 0)
             {
                 Console.WriteLine("No hay clientes registrados.");
                 return;
             }
 
             Console.WriteLine("\n--- Listado de clientes ---");
-            foreach (var cliente in listaDeClientes)
+            foreach (var cliente in clientes)
                 cliente.MostrarInformacionEnConsola();
         }
 
@@ -250,7 +253,7 @@ namespace ProyectoFinalProgramacionV.Facturacion
             Console.Write("Identificador del cliente a actualizar: ");
             string id = Console.ReadLine();
 
-            Cliente clienteEncontrado = listaDeClientes.FirstOrDefault(c => c.IdentificadorDeCliente == id);
+            Cliente clienteEncontrado = clienteRepositorio.BuscarClientePorId(id);
 
             if (clienteEncontrado == null)
             {
@@ -268,6 +271,7 @@ namespace ProyectoFinalProgramacionV.Facturacion
             if (!string.IsNullOrWhiteSpace(nuevoCorreo))
                 clienteEncontrado.CorreoElectronico = nuevoCorreo;
 
+            clienteRepositorio.ActualizarCliente(clienteEncontrado);
             Console.WriteLine("Cliente actualizado correctamente.");
         }
 
@@ -276,7 +280,7 @@ namespace ProyectoFinalProgramacionV.Facturacion
             Console.Write("Identificador del cliente a eliminar: ");
             string id = Console.ReadLine();
 
-            Cliente clienteEncontrado = listaDeClientes.FirstOrDefault(c => c.IdentificadorDeCliente == id);
+            Cliente clienteEncontrado = clienteRepositorio.BuscarClientePorId(id);
 
             if (clienteEncontrado == null)
             {
@@ -284,7 +288,7 @@ namespace ProyectoFinalProgramacionV.Facturacion
                 return;
             }
 
-            listaDeClientes.Remove(clienteEncontrado);
+            clienteRepositorio.EliminarCliente(id);
             Console.WriteLine("Cliente eliminado correctamente.");
         }
 
@@ -292,13 +296,15 @@ namespace ProyectoFinalProgramacionV.Facturacion
 
         private void RegistrarNuevaVenta()
         {
-            if (listaDeClientes.Count == 0)
+            List<Cliente> clientes = clienteRepositorio.ObtenerTodosLosClientes();
+            if (clientes.Count == 0)
             {
                 Console.WriteLine("Debe existir al menos un cliente registrado antes de vender.");
                 return;
             }
 
-            if (listaDeProductos.Count == 0)
+            List<Producto> productos = productoRepositorio.ObtenerTodosLosProductos();
+            if (productos.Count == 0)
             {
                 Console.WriteLine("Debe existir al menos un producto registrado antes de vender.");
                 return;
@@ -308,7 +314,7 @@ namespace ProyectoFinalProgramacionV.Facturacion
             Console.Write("Identificador del cliente que compra: ");
             string idCliente = Console.ReadLine();
 
-            Cliente clienteSeleccionado = listaDeClientes.FirstOrDefault(c => c.IdentificadorDeCliente == idCliente);
+            Cliente clienteSeleccionado = clienteRepositorio.BuscarClientePorId(idCliente);
 
             if (clienteSeleccionado == null)
             {
@@ -316,7 +322,7 @@ namespace ProyectoFinalProgramacionV.Facturacion
                 return;
             }
 
-            Venta nuevaVenta = new Venta(contadorDeVentas, clienteSeleccionado);
+            List<DetalleDeVenta> detallesDeLaVenta = new List<DetalleDeVenta>();
             bool seguirAgregandoProductos = true;
 
             while (seguirAgregandoProductos)
@@ -331,7 +337,7 @@ namespace ProyectoFinalProgramacionV.Facturacion
                     continue;
                 }
 
-                Producto productoSeleccionado = listaDeProductos.FirstOrDefault(p => p.CodigoDeArticulo == codigoProducto);
+                Producto productoSeleccionado = productoRepositorio.BuscarProductoPorCodigo(codigoProducto);
 
                 if (productoSeleccionado == null)
                 {
@@ -345,8 +351,8 @@ namespace ProyectoFinalProgramacionV.Facturacion
                 try
                 {
                     DetalleDeVenta detalle = new DetalleDeVenta(productoSeleccionado, cantidad);
-                    nuevaVenta.AgregarDetalle(detalle);
-                    productoSeleccionado.ReducirStockPorVenta(cantidad); // se descuenta el stock al momento
+                    productoSeleccionado.ReducirStockPorVenta(cantidad); // valida y descuenta el stock en memoria
+                    detallesDeLaVenta.Add(detalle);
                     Console.WriteLine("Producto agregado a la venta.");
                 }
                 catch (Exception ex)
@@ -355,30 +361,36 @@ namespace ProyectoFinalProgramacionV.Facturacion
                 }
             }
 
-            if (nuevaVenta.DetallesDeLaVenta.Count == 0)
+            if (detallesDeLaVenta.Count == 0)
             {
                 Console.WriteLine("La venta se cancelo porque no se agrego ningun producto.");
                 return;
             }
 
-            listaDeVentas.Add(nuevaVenta);
-            clienteSeleccionado.AgregarVentaAlHistorial(nuevaVenta);
-            contadorDeVentas++;
-
-            Console.WriteLine("\nVenta registrada con exito:");
-            nuevaVenta.MostrarDetalleCompletoEnConsola();
+            try
+            {
+                Venta ventaRegistrada = ventaRepositorio.RegistrarVenta(clienteSeleccionado, detallesDeLaVenta);
+                Console.WriteLine("\nVenta registrada con exito:");
+                ventaRegistrada.MostrarDetalleCompletoEnConsola();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error al registrar la venta en la base de datos: " + ex.Message);
+            }
         }
 
         private void ListarTodasLasVentas()
         {
-            if (listaDeVentas.Count == 0)
+            List<Venta> ventas = ventaRepositorio.ObtenerTodasLasVentas();
+
+            if (ventas.Count == 0)
             {
                 Console.WriteLine("No hay ventas registradas.");
                 return;
             }
 
             Console.WriteLine("\n--- Listado de ventas ---");
-            foreach (var venta in listaDeVentas)
+            foreach (var venta in ventas)
                 Console.WriteLine(venta.ObtenerResumenDeVenta());
         }
     }

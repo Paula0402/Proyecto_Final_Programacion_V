@@ -1,6 +1,5 @@
 
---Script de creacion de la base de datos para el Sistema de Ventas
-
+/* Script de creacion de la base de datos para el Sistema de Ventas */
 DROP DATABASE IF EXISTS sistemaventasdb;
 CREATE DATABASE sistemaventasdb;
 USE sistemaventasdb;
