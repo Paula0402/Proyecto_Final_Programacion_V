@@ -1,25 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ProyectoFinalProgramacionV_Gitlab.Repositorio;
-using ProyectoFinalProgramacionV_Gitlab.Fabrica;
+using ProyectoFinalProgramacionV.BLL;
+using ProyectoFinalProgramacionV.Fabrica;
 
-
-namespace ProyectoFinalProgramacionV_Gitlab.Facturacion
+namespace ProyectoFinalProgramacionV.Facturacion
 {
-    /// Modulo principal del sistema: contiene el menu de consola y coordina
-    /// las operaciones sobre productos, clientes y ventas a traves de los repositorios.
     internal class ModuloDeFacturacion
     {
-        private ProductoRepositorio productoRepositorio;
-        private ClienteRepositorio clienteRepositorio;
-        private VentaRepositorio ventaRepositorio;
+        private ProductoBLL productoBLL;
+        private ClienteBLL clienteBLL;
+        private VentaBLL ventaBLL;
 
         public ModuloDeFacturacion()
         {
-            productoRepositorio = FabricaDeRepositorios.CrearProductoRepositorio();
-            clienteRepositorio = FabricaDeRepositorios.CrearClienteRepositorio();
-            ventaRepositorio = FabricaDeRepositorios.CrearVentaRepositorio(productoRepositorio, clienteRepositorio);
+            productoBLL = FabricaBLL.CrearProductoBLL();
+            clienteBLL = FabricaBLL.CrearClienteBLL();
+            ventaBLL = FabricaBLL.CrearVentaBLL(productoBLL, clienteBLL);
         }
 
         public void IniciarMenuPrincipal()
@@ -105,7 +102,7 @@ namespace ProyectoFinalProgramacionV_Gitlab.Facturacion
             try
             {
                 Producto nuevoProducto = new Producto(codigo, nombre, descripcion, precio, stock);
-                productoRepositorio.AgregarProducto(nuevoProducto);
+                productoBLL.AgregarProducto(nuevoProducto);
                 Console.WriteLine("Producto agregado correctamente.");
             }
             catch (Exception ex)
@@ -116,7 +113,7 @@ namespace ProyectoFinalProgramacionV_Gitlab.Facturacion
 
         private void ListarProductos()
         {
-            List<Producto> productos = productoRepositorio.ObtenerTodosLosProductos();
+            List<Producto> productos = productoBLL.ObtenerTodosLosProductos();
 
             if (productos.Count == 0)
             {
@@ -134,7 +131,7 @@ namespace ProyectoFinalProgramacionV_Gitlab.Facturacion
             Console.Write("Codigo del producto a actualizar: ");
             string codigo = Console.ReadLine();
 
-            Producto productoEncontrado = productoRepositorio.BuscarProductoPorCodigo(codigo);
+            Producto productoEncontrado = productoBLL.BuscarProductoPorCodigo(codigo);
 
             if (productoEncontrado == null)
             {
@@ -152,7 +149,7 @@ namespace ProyectoFinalProgramacionV_Gitlab.Facturacion
             if (!string.IsNullOrWhiteSpace(nuevoPrecioTexto))
                 productoEncontrado.PrecioUnitario = Convert.ToDecimal(nuevoPrecioTexto);
 
-            productoRepositorio.ActualizarProducto(productoEncontrado);
+            productoBLL.ActualizarProducto(productoEncontrado);
             Console.WriteLine("Producto actualizado correctamente.");
         }
 
@@ -161,7 +158,7 @@ namespace ProyectoFinalProgramacionV_Gitlab.Facturacion
             Console.Write("Codigo del producto a eliminar: ");
             string codigo = Console.ReadLine();
 
-            Producto productoEncontrado = productoRepositorio.BuscarProductoPorCodigo(codigo);
+            Producto productoEncontrado = productoBLL.BuscarProductoPorCodigo(codigo);
 
             if (productoEncontrado == null)
             {
@@ -169,7 +166,7 @@ namespace ProyectoFinalProgramacionV_Gitlab.Facturacion
                 return;
             }
 
-            productoRepositorio.EliminarProducto(codigo);
+            productoBLL.EliminarProducto(codigo);
             Console.WriteLine("Producto eliminado correctamente.");
         }
 
@@ -224,7 +221,7 @@ namespace ProyectoFinalProgramacionV_Gitlab.Facturacion
                 if (!nuevoCliente.CorreoElectronicoEsValido())
                     Console.WriteLine("Advertencia: el correo no parece valido, se guardo de todas formas.");
 
-                clienteRepositorio.AgregarCliente(nuevoCliente);
+                clienteBLL.AgregarCliente(nuevoCliente);
                 Console.WriteLine("Cliente agregado correctamente.");
             }
             catch (Exception ex)
@@ -235,7 +232,7 @@ namespace ProyectoFinalProgramacionV_Gitlab.Facturacion
 
         private void ListarClientes()
         {
-            List<Cliente> clientes = clienteRepositorio.ObtenerTodosLosClientes();
+            List<Cliente> clientes = clienteBLL.ObtenerTodosLosClientes();
 
             if (clientes.Count == 0)
             {
@@ -253,7 +250,7 @@ namespace ProyectoFinalProgramacionV_Gitlab.Facturacion
             Console.Write("Identificador del cliente a actualizar: ");
             string id = Console.ReadLine();
 
-            Cliente clienteEncontrado = clienteRepositorio.BuscarClientePorId(id);
+            Cliente clienteEncontrado = clienteBLL.BuscarClientePorId(id);
 
             if (clienteEncontrado == null)
             {
@@ -271,7 +268,7 @@ namespace ProyectoFinalProgramacionV_Gitlab.Facturacion
             if (!string.IsNullOrWhiteSpace(nuevoCorreo))
                 clienteEncontrado.CorreoElectronico = nuevoCorreo;
 
-            clienteRepositorio.ActualizarCliente(clienteEncontrado);
+            clienteBLL.ActualizarCliente(clienteEncontrado);
             Console.WriteLine("Cliente actualizado correctamente.");
         }
 
@@ -280,7 +277,7 @@ namespace ProyectoFinalProgramacionV_Gitlab.Facturacion
             Console.Write("Identificador del cliente a eliminar: ");
             string id = Console.ReadLine();
 
-            Cliente clienteEncontrado = clienteRepositorio.BuscarClientePorId(id);
+            Cliente clienteEncontrado = clienteBLL.BuscarClientePorId(id);
 
             if (clienteEncontrado == null)
             {
@@ -288,7 +285,7 @@ namespace ProyectoFinalProgramacionV_Gitlab.Facturacion
                 return;
             }
 
-            clienteRepositorio.EliminarCliente(id);
+            clienteBLL.EliminarCliente(id);
             Console.WriteLine("Cliente eliminado correctamente.");
         }
 
@@ -296,14 +293,14 @@ namespace ProyectoFinalProgramacionV_Gitlab.Facturacion
 
         private void RegistrarNuevaVenta()
         {
-            List<Cliente> clientes = clienteRepositorio.ObtenerTodosLosClientes();
+            List<Cliente> clientes = clienteBLL.ObtenerTodosLosClientes();
             if (clientes.Count == 0)
             {
                 Console.WriteLine("Debe existir al menos un cliente registrado antes de vender.");
                 return;
             }
 
-            List<Producto> productos = productoRepositorio.ObtenerTodosLosProductos();
+            List<Producto> productos = productoBLL.ObtenerTodosLosProductos();
             if (productos.Count == 0)
             {
                 Console.WriteLine("Debe existir al menos un producto registrado antes de vender.");
@@ -314,7 +311,7 @@ namespace ProyectoFinalProgramacionV_Gitlab.Facturacion
             Console.Write("Identificador del cliente que compra: ");
             string idCliente = Console.ReadLine();
 
-            Cliente clienteSeleccionado = clienteRepositorio.BuscarClientePorId(idCliente);
+            Cliente clienteSeleccionado = clienteBLL.BuscarClientePorId(idCliente);
 
             if (clienteSeleccionado == null)
             {
@@ -337,7 +334,7 @@ namespace ProyectoFinalProgramacionV_Gitlab.Facturacion
                     continue;
                 }
 
-                Producto productoSeleccionado = productoRepositorio.BuscarProductoPorCodigo(codigoProducto);
+                Producto productoSeleccionado = productoBLL.BuscarProductoPorCodigo(codigoProducto);
 
                 if (productoSeleccionado == null)
                 {
@@ -369,7 +366,7 @@ namespace ProyectoFinalProgramacionV_Gitlab.Facturacion
 
             try
             {
-                Venta ventaRegistrada = ventaRepositorio.RegistrarVenta(clienteSeleccionado, detallesDeLaVenta);
+                Venta ventaRegistrada = ventaBLL.RegistrarVenta(clienteSeleccionado, detallesDeLaVenta);
                 Console.WriteLine("\nVenta registrada con exito:");
                 ventaRegistrada.MostrarDetalleCompletoEnConsola();
             }
@@ -381,7 +378,7 @@ namespace ProyectoFinalProgramacionV_Gitlab.Facturacion
 
         private void ListarTodasLasVentas()
         {
-            List<Venta> ventas = ventaRepositorio.ObtenerTodasLasVentas();
+            List<Venta> ventas = ventaBLL.ObtenerTodasLasVentas();
 
             if (ventas.Count == 0)
             {
