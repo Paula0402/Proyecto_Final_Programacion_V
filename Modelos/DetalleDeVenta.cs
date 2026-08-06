@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace ProyectoFinalProgramacionV_Gitlab
+namespace ProyectoFinalProgramacionV.Modelos
 {
     /// Representa una linea de detalle dentro de una venta: el producto vendido,
     /// la cantidad y el subtotal calculado en el momento de la venta.

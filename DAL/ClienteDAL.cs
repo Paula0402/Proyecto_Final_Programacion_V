@@ -65,10 +65,17 @@ namespace ProyectoFinalProgramacionV.DAL
         {
             using (MySqlConnection cnx = conexionBaseDatos.ObtenerConexionAbierta())
             {
-                string query = "DELETE FROM clientes WHERE id_cliente = @id";
-                MySqlCommand cmd = new MySqlCommand(query, cnx);
-                cmd.Parameters.AddWithValue("@id", idCliente);
-                cmd.ExecuteNonQuery();
+                try
+                {
+                    string query = "DELETE FROM clientes WHERE id_cliente = @id";
+                    MySqlCommand cmd = new MySqlCommand(query, cnx);
+                    cmd.Parameters.AddWithValue("@id", idCliente);
+                    cmd.ExecuteNonQuery();
+                }
+                catch (MySqlException ex) when (ex.Number == 1451)
+                {
+                    throw new Exception("No se puede eliminar este cliente porque ya tiene ventas registradas asociadas.");
+                }
             }
         }
 

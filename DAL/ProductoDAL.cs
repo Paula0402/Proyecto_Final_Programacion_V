@@ -70,10 +70,17 @@ namespace ProyectoFinalProgramacionV.DAL
         {
             using (MySqlConnection cnx = conexionBaseDatos.ObtenerConexionAbierta())
             {
-                string query = "DELETE FROM productos WHERE codigo_articulo = @codigo";
-                MySqlCommand cmd = new MySqlCommand(query, cnx);
-                cmd.Parameters.AddWithValue("@codigo", codigoArticulo);
-                cmd.ExecuteNonQuery();
+                try
+                {
+                    string query = "DELETE FROM productos WHERE codigo_articulo = @codigo";
+                    MySqlCommand cmd = new MySqlCommand(query, cnx);
+                    cmd.Parameters.AddWithValue("@codigo", codigoArticulo);
+                    cmd.ExecuteNonQuery();
+                }
+                catch (MySqlException ex) when (ex.Number == 1451)
+                {
+                    throw new Exception("No se puede eliminar este producto porque ya tiene ventas registradas asociadas.");
+                }
             }
         }
 

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProyectoFinalProgramacionV_Gitlab
+namespace ProyectoFinalProgramacionV.Modelos
 {
 
     /// Clase base abstracta que representa a una persona dentro del sistema.

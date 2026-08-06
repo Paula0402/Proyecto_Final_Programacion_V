@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using ProyectoFinalProgramacionV.BLL;
 using ProyectoFinalProgramacionV.Fabrica;
+using ProyectoFinalProgramacionV.Modelos;
 
 namespace ProyectoFinalProgramacionV.Facturacion
 {
@@ -25,7 +26,7 @@ namespace ProyectoFinalProgramacionV.Facturacion
 
             while (continuarEjecutando)
             {
-                Console.WriteLine("\n===== SISTEMA DE VENTAS =====");
+                Console.WriteLine("\n----- Sistema de Ventas -----");
                 Console.WriteLine("1. Gestionar productos");
                 Console.WriteLine("2. Gestionar clientes");
                 Console.WriteLine("3. Registrar venta");
@@ -52,7 +53,7 @@ namespace ProyectoFinalProgramacionV.Facturacion
             }
         }
 
-        // ===================== PRODUCTOS =====================
+        // ---Productos-----------------------------------------------------------------------------------------------------------------
 
         private void MenuDeProductos()
         {
@@ -170,7 +171,7 @@ namespace ProyectoFinalProgramacionV.Facturacion
             Console.WriteLine("Producto eliminado correctamente.");
         }
 
-        // ===================== CLIENTES =====================
+        // ---Clientes---------------------------------------------------------------------------------------------------------------------------------
 
         private void MenuDeClientes()
         {
@@ -289,7 +290,7 @@ namespace ProyectoFinalProgramacionV.Facturacion
             Console.WriteLine("Cliente eliminado correctamente.");
         }
 
-        // ===================== VENTAS =====================
+        // ---Cliente--------------------------------------------------------------------------------------------------------------------------------------
 
         private void RegistrarNuevaVenta()
         {

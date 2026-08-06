@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 
-namespace ProyectoFinalProgramacionV_Gitlab.Datos
+namespace ProyectoFinalProgramacionV.Datos
 {
     /// Clase encargada de crear y entregar conexiones a la base de datos MySQL.
     internal class ConexionBaseDatos

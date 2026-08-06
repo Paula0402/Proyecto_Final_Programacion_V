@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using ProyectoFinalProgramacionV.DAL;
 using ProyectoFinalProgramacionV.DTOs;
+using ProyectoFinalProgramacionV.Modelos;
+using System;
 
 namespace ProyectoFinalProgramacionV.BLL
 {

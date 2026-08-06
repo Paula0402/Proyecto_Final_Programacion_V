@@ -1,13 +1,20 @@
-﻿using ProyectoFinalProgramacionV.Facturacion;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using ProyectoFinalProgramacionV.UI;
 
-class Program
+namespace ProyectoFinalProgramacionV
 {
-    static void Main(string[] args)
+    internal static class Program
     {
-        Console.OutputEncoding = System.Text.Encoding.UTF8;
-        Console.WriteLine("Iniciando Sistema de Ventas...\n");
-
-        ModuloDeFacturacion modulo = new ModuloDeFacturacion();
-        modulo.IniciarMenuPrincipal();
+        [STAThread]
+        static void Main()
+        {
+            ApplicationConfiguration.Initialize();
+            Application.Run(new FormularioPrincipal());
+        }
     }
 }

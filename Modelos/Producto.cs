@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProyectoFinalProgramacionV_Gitlab
+namespace ProyectoFinalProgramacionV.Modelos
+{
 
     /// Representa un producto físico con stock dentro del sistema de ventas.
 
@@ -88,6 +89,15 @@ namespace ProyectoFinalProgramacionV_Gitlab
 
             CantidadEnStock += cantidadAReponer;
             Console.WriteLine($"Stock de '{NombreDelArticulo}' actualizado a {CantidadEnStock} unidades.");
+        }
+
+        // Establece directamente el stock (uso administrativo, ej. correccion desde el formulario)
+        public void EstablecerStock(int nuevaCantidadEnStock)
+        {
+            if (nuevaCantidadEnStock < 0)
+                throw new ArgumentException("El stock no puede ser negativo.");
+
+            CantidadEnStock = nuevaCantidadEnStock;
         }
 
 
