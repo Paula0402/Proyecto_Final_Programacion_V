@@ -23,5 +23,10 @@ namespace ProyectoFinalProgramacionV.Fabrica
         {
             return new VentaBLL(productoBLL, clienteBLL);
         }
+
+        public static UsuarioBLL CrearUsuarioBLL()
+        {
+            return new UsuarioBLL();
+        }
     }
 }

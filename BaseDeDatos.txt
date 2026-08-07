@@ -47,6 +47,16 @@ CREATE TABLE detalle_venta (
     FOREIGN KEY (codigo_articulo) REFERENCES productos(codigo_articulo)
 );
 
+-- Tabla para ususarios del login
+CREATE TABLE usuarios (
+    id_usuario       INT           NOT NULL AUTO_INCREMENT,
+    nombre_usuario   VARCHAR(50)   NOT NULL,
+    contrasena_hash  VARCHAR(255)  NOT NULL,
+    nombre_completo  VARCHAR(150)  NOT NULL,
+    PRIMARY KEY (id_usuario),
+    UNIQUE KEY (nombre_usuario)
+);
+
 -- Datos de prueba, opcional, para probar el CRUD sin escribir todo a mano
 INSERT INTO productos (codigo_articulo, nombre_articulo, descripcion_articulo, precio_unitario, cantidad_en_stock, stock_minimo)
 VALUES

@@ -13,7 +13,7 @@ namespace ProyectoFinalProgramacionV.Modelos
     internal class Cliente : Persona
     {
 
-        /// <summary>Identificador único del cliente (ej: C-001).</summary>
+        /// <summary>Identificador único del cliente (ejemplo de patrón: C-001).</summary>
         public string IdentificadorDeCliente { get; set; }
 
         /// <summary>Lista de ventas realizadas por este cliente.</summary>

@@ -14,7 +14,7 @@ namespace ProyectoFinalProgramacionV
         static void Main()
         {
             ApplicationConfiguration.Initialize();
-            Application.Run(new FormularioPrincipal());
+            Application.Run(new FormularioLogin());
         }
     }
 }
